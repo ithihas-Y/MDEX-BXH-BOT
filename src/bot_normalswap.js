@@ -9,16 +9,19 @@ const IRouter = require('@uniswap/v2-periphery/build/IUniswapV2Router02.json')
 const Utils = require('../build/contracts/Utils.json')
 const IERC20 = require('@uniswap/v2-periphery/build/IERC20.json')
 
+
+
+
+
+let addrToken0 = "0x64FF637fB478863B7468bc97D30a5bF3A428a1fD" //input token addresses here token 0,currently ETH
+let addrToken1 = "0x3D760a45D0887DFD89A2F5385a236B29Cb46ED2a"//input token 1 address here,currently DAI
+
+
+
 //importing parameters from .env (mostly given)
-const addrDai = process.env.HDAI
-const addrEth = process.env.WETH//indeed its weth, henceforth simply eth
-const addrSFactory = process.env.BXHFactory
-const addrSRouter = process.env.BXHRouter
-let addrToken0 = process.env.ADDR_TOKEN0
-let addrToken1 = process.env.ADDR_TOKEN1
-const addrUFactory = process.env.MDEXFactory
-const addrURouter = process.env.MDEXRouter
-const addrUtils = process.env.ADDR_UTILS
+const addrDai = "0x3D760a45D0887DFD89A2F5385a236B29Cb46ED2a"
+const addrEth = "0x64FF637fB478863B7468bc97D30a5bF3A428a1fD"//indeed its weth, henceforth simply eth
+const addrUtils = ""
 const localDeplyment = process.env.LOCAL_DEPLOYMENT;
 const priceToken0 = process.env.PRICE_TOKEN0
 const priceToken1 = process.env.PRICE_TOKEN1
@@ -43,13 +46,13 @@ if (localDeplyment) {
 }
 
 //contracts
-const uFactory = new web3.eth.Contract(IFactory.abi,addrUFactory)
-const uRouter = new web3.eth.Contract(IRouter.abi,addrURouter)
-const sFactory = new web3.eth.Contract(IFactory.abi,addrSFactory)//sushiswap, same ABIs, sushiswap forked uniswap so, basically same contracts
-const sRouter = new web3.eth.Contract(IRouter.abi,addrSRouter)
-const token0 = new web3.eth.Contract(IERC20.abi,addrToken0)//henceforth T0
-const token1 = new web3.eth.Contract(IERC20.abi,addrToken1)//and T1
-const utils = new web3.eth.Contract(Utils.abi, addrUtils)//because includes an support math function that its required
+const uFactory = new web3.eth.Contract(IFactory.abi,"0xb0b670fc1F7724119963018DB0BfA86aDb22d941")
+const uRouter = new web3.eth.Contract(IRouter.abi,"0xED7d5F38C79115ca12fe6C0041abb22F0A06C300")
+const sFactory = new web3.eth.Contract(IFactory.abi,"0xe0367ec2bd4Ba22B1593E4fEFcB91D29DE6C512a")//sushiswap, same ABIs, sushiswap forked uniswap so, basically same contracts
+const sRouter = new web3.eth.Contract(IRouter.abi,"0x96F3Ce39Ad2BfDCf92C0F6E2C2CAbF83874660Fc")
+const token0 = new web3.eth.Contract(IERC20.abi,"0x64FF637fB478863B7468bc97D30a5bF3A428a1fD")//henceforth T0
+const token1 = new web3.eth.Contract(IERC20.abi,"0x3D760a45D0887DFD89A2F5385a236B29Cb46ED2a")//and T1
+const utils = new web3.eth.Contract(Utils.abi, addrUtils)//because includes an support math function that its required,Need to deploy utils
 
 //asyncs variables
 let uPair0,uPair1,sPair,myAccount,token0Name,token1Name,token0Symbol,token1Symbol
@@ -150,16 +153,6 @@ newBlockEvent.on('data', async function(blockHeader){
             /*beyond time spended, you need to approve uRouter to spend T0 
             before measuring so it will cost eth do it in runtime, al least for the first time*/
             const gasNeeded1 = (0.15*10**6)*2 
-            /*
-            await token0.methods.approve(uRouter.options.address,amountIn).send()
-            const gasNeeded1 = await uRouter.methods.swapExactTokensForTokens(
-                amountIn,
-                0,
-                path,
-                myAccount,
-                deadline
-            ).estimateGas()
-            */
             const gasNeeded=gasNeeded0+gasNeeded1
 
             const gasPrice = await web3.eth.getGasPrice()

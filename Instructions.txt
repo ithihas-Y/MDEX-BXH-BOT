@@ -1,0 +1,11 @@
+1. Deploy the Arbitrager.sol file and paste the address in the {addrUtils} variable of the bot_normalswap.js
+
+2.The current tokens are set to token0 is WETH & token 1 is DAI
+
+3.Install npm packages.
+
+3.PriceToken0 and PriceToken1 represent the value of said token in ETH(for example 1 Dai = 0.000375 ETH,1AAVEToken = 0.1369 ETH)
+
+4.Input your private key in the private key variable.
+
+5.Run node bot_normalswap.js command when done.
